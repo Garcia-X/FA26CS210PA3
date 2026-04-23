@@ -114,7 +114,6 @@ void printPath(pair<int,int> exitcell,
 
 // ----------------------------------------------------------
 // STUDENTS IMPLEMENT DFS HERE
-// Day 1: Add Signature and Stub only
 // ----------------------------------------------------------
 bool dfs(int r, int c,
          const vector<vector<int>>& maze,
@@ -148,8 +147,14 @@ bool dfs(int r, int c,
         int nr = r + dr[i];
         int nc = c + dc[i];
 
-        if (dfs(nr, nc, maze, visited, parent_r, parent_c, exit_r, exit_c)) {
-            return true;
+        if (nr >= 0 && nr < N && nc >= 0 && nc < M &&
+            maze[nr][nc] == 0 && !visited[nr][nc]) {
+            parent_r[nr][nc] = r;
+            parent_c[nr][nc] = c;
+
+            if (dfs(nr, nc, maze, visited, parent_r, parent_c, exit_r, exit_c)) {
+                return true;
+            }
         }
     }
 
@@ -189,7 +194,7 @@ int main() {
     bool found = dfs(ent_r, ent_c, maze, visited, parent_r, parent_c, exit_r, exit_c);
 
     if (found) {
-        cout << "\nA path exists.\n";
+        printPath(exitcell, parent_r, parent_c, ent_r, ent_c);
     } else {
         cout << "\nNo path exists.\n";
     }

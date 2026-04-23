@@ -36,3 +36,20 @@
 - Left path reconstruction for the next work session.
 
 **Commit:** (Day 2: implement DFS traversal logic)
+
+---
+
+## 2026-04-23
+**Work:** Parent tracking + path reconstruction
+- Added parent tracking in `dfs(...)` using `parent_r` and `parent_c`.
+- Set each neighbor’s parent before making the recursive DFS call.
+- Kept the DFS base cases, visited marking, exit check, and 4-direction traversal.
+- Restored the final output in `main()` so successful searches call `printPath()` again.
+
+**Testing:**
+- Built the project successfully in CLion.
+- Ran the program with small maze sizes such as `5 5`.
+- Confirmed that mazes with a path now print the reconstructed path.
+- Confirmed that mazes without a path still print `No path exists.`
+
+**Commit:** (Day 3: add parent tracking and path reconstruction)
