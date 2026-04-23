@@ -17,3 +17,22 @@
 - Confirmed that the current DFS stub compiles and the program prints `No path exists.`
 
 **Commit:** (Day 1: project setup + DFS prep)
+
+---
+
+## 2026-04-22
+**Work:** DFS traversal logic
+- Added DFS base case checks for out-of-bounds positions, walls, and previously visited cells.
+- Marked each visited cell inside `dfs(...)`.
+- Added the exit check so DFS returns `true` when it reaches the exit.
+- Added the 4-direction traversal loop using `dr` and `dc`.
+- Added recursive DFS calls so the search now explores the maze.
+- Temporarily changed the success output to `A path exists.` since parent tracking is not implemented yet.
+
+**Testing:**
+- Built the project successfully in CLion.
+- Ran the program with small maze sizes such as `5 5`.
+- Confirmed that the program reports whether a path exists.
+- Left path reconstruction for the next work session.
+
+**Commit:** (Day 2: implement DFS traversal logic)

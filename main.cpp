@@ -38,16 +38,16 @@ pair<int,int> chooseBoundaryCell(const vector<vector<int>>& maze) {
         int side = rand() % 4;
         int r, c;
 
-        if (side == 0) {          // top row
+        if (side == 0) {
             r = 0;
             c = rand() % M;
-        } else if (side == 1) {   // bottom row
+        } else if (side == 1) {
             r = N - 1;
             c = rand() % M;
-        } else if (side == 2) {   // left column
+        } else if (side == 2) {
             r = rand() % N;
             c = 0;
-        } else {                  // right column
+        } else {
             r = rand() % N;
             c = M - 1;
         }
@@ -97,7 +97,6 @@ void printPath(pair<int,int> exitcell,
 
     vector<pair<int,int>> path;
 
-    // Walk backward from exit to entrance
     while (!(r == ent_r && c == ent_c)) {
         path.push_back({r, c});
         int pr = parent_r[r][c];
@@ -115,7 +114,7 @@ void printPath(pair<int,int> exitcell,
 
 // ----------------------------------------------------------
 // STUDENTS IMPLEMENT DFS HERE
-// Day 1: add signature and stub only
+// Day 1: Add Signature and Stub only
 // ----------------------------------------------------------
 bool dfs(int r, int c,
          const vector<vector<int>>& maze,
@@ -124,12 +123,41 @@ bool dfs(int r, int c,
          vector<vector<int>>& parent_c,
          int exit_r, int exit_c)
 {
+    int N = maze.size();
+    int M = maze[0].size();
+
+    if (r < 0 || r >= N || c < 0 || c >= M) {
+        return false;
+    }
+
+    if (maze[r][c] == 1) {
+        return false;
+    }
+
+    if (visited[r][c]) {
+        return false;
+    }
+
+    visited[r][c] = true;
+
+    if (r == exit_r && c == exit_c) {
+        return true;
+    }
+
+    for (int i = 0; i < 4; i++) {
+        int nr = r + dr[i];
+        int nc = c + dc[i];
+
+        if (dfs(nr, nc, maze, visited, parent_r, parent_c, exit_r, exit_c)) {
+            return true;
+        }
+    }
+
     return false;
 }
 
-
 // ----------------------------------------------------------
-// MAIN PROGRAM (students add DFS calls and logic)
+// MAIN PROGRAM
 // ----------------------------------------------------------
 int main() {
     int N, M;
@@ -140,7 +168,6 @@ int main() {
     vector<vector<int>> maze(N, vector<int>(M));
     generateMaze(maze, N, M);
 
-    // Pick entrance and exit
     pair<int,int> entrance = chooseBoundaryCell(maze);
     pair<int,int> exitcell = chooseBoundaryCell(maze);
 
@@ -153,10 +180,8 @@ int main() {
     int exit_r = exitcell.first;
     int exit_c = exitcell.second;
 
-    // Display the maze
     printMaze(maze, ent_r, ent_c, exit_r, exit_c);
 
-    // Students must use these
     vector<vector<bool>> visited(N, vector<bool>(M, false));
     vector<vector<int>> parent_r(N, vector<int>(M, -1));
     vector<vector<int>> parent_c(N, vector<int>(M, -1));
@@ -164,7 +189,7 @@ int main() {
     bool found = dfs(ent_r, ent_c, maze, visited, parent_r, parent_c, exit_r, exit_c);
 
     if (found) {
-        printPath(exitcell, parent_r, parent_c, ent_r, ent_c);
+        cout << "\nA path exists.\n";
     } else {
         cout << "\nNo path exists.\n";
     }
