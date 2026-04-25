@@ -168,7 +168,16 @@ int main() {
     int N, M;
 
     cout << "Enter maze dimensions N M: ";
-    cin >> N >> M;
+
+    if (!(cin >> N >> M)) {
+        cout << "\nInvalid input.\n";
+        return 0;
+    }
+
+    if (N <= 0 || M <= 0) {
+        cout << "\nMaze dimensions must be positive.\n";
+        return 0;
+    }
 
     vector<vector<int>> maze(N, vector<int>(M));
     generateMaze(maze, N, M);

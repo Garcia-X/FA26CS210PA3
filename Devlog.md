@@ -53,3 +53,20 @@
 - Confirmed that mazes without a path still print `No path exists.`
 
 **Commit:** (Day 3: add parent tracking and path reconstruction)
+
+---
+
+## 2026-04-24
+**Work:** Input validation + program cleanup
+- Added input validation in `main()` for maze dimensions. 
+- Checked for failed input before building the maze.
+- Rejected non-positive maze sizes with a clear message.
+- Kept the DFS logic and provided helper function unchanged.
+
+**Testing:**
+- Built the project succesfully in CLion.
+- Ran Valid input such as `5 5` and confirmed the maze and DFS output still work.
+- Tested invalid input cases such as `0 5`, negative values, and non-numeric input `a b`.
+- Confirmed the program exits cleanly with an error message for invalid input.
+
+**Commit:** (Day 4: add input validation and test program behavior.)
