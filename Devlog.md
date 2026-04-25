@@ -70,3 +70,20 @@
 - Confirmed the program exits cleanly with an error message for invalid input.
 
 **Commit:** (Day 4: add input validation and test program behavior.)
+
+---
+
+## 2026-04-25
+**Work:** DFS cleanup + debug support
+- Refactored the DFS logic by adding a `canVisit(...)` helper to handle bounds, wall, and visited checks in one place.
+- Simplified `dfs(...)` so the recursion logic is easier to read.
+- Kept parent tracking and path reconstruction behavior unchanged.
+- Added optional DFS debug output controlled by a `DEBUG_DFS` flag.
+
+**Testing:**
+- Built the project successfully in CLion.
+- Ran the program with valid maze sizes and confirmed that path printing still works.
+- Confirmed that blocked mazes still print `No path exists.`
+- Verified that turning debug output off keeps the normal assignment output clean.
+
+**Commit:** (Day 5: refactor DFS and add optional debug tracing)

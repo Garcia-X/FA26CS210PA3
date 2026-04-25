@@ -13,6 +13,8 @@ using namespace std;
 int dr[4] = {-1, 0, 1, 0};
 int dc[4] = {0, 1, 0, -1};
 
+const bool DEBUG_DFS = false;
+
 // ----------------------------------------------------------
 // DO NOT MODIFY: Maze generation
 // ----------------------------------------------------------
@@ -22,7 +24,7 @@ void generateMaze(vector<vector<int>>& maze, int N, int M) {
     for (int r = 0; r < N; r++) {
         for (int c = 0; c < M; c++) {
             int roll = rand() % 100;
-            maze[r][c] = (roll < 70) ? 0 : 1;   // 0 = open, 1 = wall
+            maze[r][c] = (roll < 70) ? 0 : 1;
         }
     }
 }
@@ -112,6 +114,19 @@ void printPath(pair<int,int> exitcell,
     }
 }
 
+bool canVisit(int r, int c,
+              const vector<vector<int>>& maze,
+              const vector<vector<bool>>& visited)
+{
+    int N = maze.size();
+    int M = maze[0].size();
+
+    return r >= 0 && r < N &&
+           c >= 0 && c < M &&
+           maze[r][c] == 0 &&
+           !visited[r][c];
+}
+
 // ----------------------------------------------------------
 // STUDENTS IMPLEMENT DFS HERE
 // ----------------------------------------------------------
@@ -122,22 +137,15 @@ bool dfs(int r, int c,
          vector<vector<int>>& parent_c,
          int exit_r, int exit_c)
 {
-    int N = maze.size();
-    int M = maze[0].size();
-
-    if (r < 0 || r >= N || c < 0 || c >= M) {
-        return false;
-    }
-
-    if (maze[r][c] == 1) {
-        return false;
-    }
-
-    if (visited[r][c]) {
+    if (!canVisit(r, c, maze, visited)) {
         return false;
     }
 
     visited[r][c] = true;
+
+    if (DEBUG_DFS) {
+        cout << "Visiting: (" << r << ", " << c << ")\n";
+    }
 
     if (r == exit_r && c == exit_c) {
         return true;
@@ -147,10 +155,14 @@ bool dfs(int r, int c,
         int nr = r + dr[i];
         int nc = c + dc[i];
 
-        if (nr >= 0 && nr < N && nc >= 0 && nc < M &&
-            maze[nr][nc] == 0 && !visited[nr][nc]) {
+        if (canVisit(nr, nc, maze, visited)) {
             parent_r[nr][nc] = r;
             parent_c[nr][nc] = c;
+
+            if (DEBUG_DFS) {
+                cout << "Moving to: (" << nr << ", " << nc << ") from ("
+                     << r << ", " << c << ")\n";
+            }
 
             if (dfs(nr, nc, maze, visited, parent_r, parent_c, exit_r, exit_c)) {
                 return true;
