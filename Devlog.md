@@ -87,3 +87,18 @@
 - Verified that turning debug output off keeps the normal assignment output clean.
 
 **Commit:** (Day 5: refactor DFS and add optional debug tracing)
+
+---
+
+## 2026-04-26
+**Work:** DFS review + code cleanup
+- Reviewed the completed DFS implementation against the assignment directions.
+- Kept the recursive DFS, visited tracking, parent tracking, and path reconstruction in place.
+- Removed extra ideas that were not needed in `main.cpp`.
+- Kept the program output limited to the maze, the path when found, and `No path exists.` otherwise.
+
+**Testing:**
+- Confirmed that the current version still matches the required DFS behavior.
+- Kept the code ready for future final review before submission.
+
+**Commit:** (Day 6: review DFS implementation and clean up code)

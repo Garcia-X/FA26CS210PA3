@@ -13,8 +13,6 @@ using namespace std;
 int dr[4] = {-1, 0, 1, 0};
 int dc[4] = {0, 1, 0, -1};
 
-const bool DEBUG_DFS = false;
-
 // ----------------------------------------------------------
 // DO NOT MODIFY: Maze generation
 // ----------------------------------------------------------
@@ -24,7 +22,7 @@ void generateMaze(vector<vector<int>>& maze, int N, int M) {
     for (int r = 0; r < N; r++) {
         for (int c = 0; c < M; c++) {
             int roll = rand() % 100;
-            maze[r][c] = (roll < 70) ? 0 : 1;
+            maze[r][c] = (roll < 70) ? 0 : 1;   // 0 = open, 1 = wall
         }
     }
 }
@@ -40,16 +38,16 @@ pair<int,int> chooseBoundaryCell(const vector<vector<int>>& maze) {
         int side = rand() % 4;
         int r, c;
 
-        if (side == 0) {
+        if (side == 0) {          // top row
             r = 0;
             c = rand() % M;
-        } else if (side == 1) {
+        } else if (side == 1) {   // bottom row
             r = N - 1;
             c = rand() % M;
-        } else if (side == 2) {
+        } else if (side == 2) {   // left column
             r = rand() % N;
             c = 0;
-        } else {
+        } else {                  // right column
             r = rand() % N;
             c = M - 1;
         }
@@ -99,6 +97,7 @@ void printPath(pair<int,int> exitcell,
 
     vector<pair<int,int>> path;
 
+    // Walk backward from exit to entrance
     while (!(r == ent_r && c == ent_c)) {
         path.push_back({r, c});
         int pr = parent_r[r][c];
@@ -143,10 +142,6 @@ bool dfs(int r, int c,
 
     visited[r][c] = true;
 
-    if (DEBUG_DFS) {
-        cout << "Visiting: (" << r << ", " << c << ")\n";
-    }
-
     if (r == exit_r && c == exit_c) {
         return true;
     }
@@ -159,11 +154,6 @@ bool dfs(int r, int c,
             parent_r[nr][nc] = r;
             parent_c[nr][nc] = c;
 
-            if (DEBUG_DFS) {
-                cout << "Moving to: (" << nr << ", " << nc << ") from ("
-                     << r << ", " << c << ")\n";
-            }
-
             if (dfs(nr, nc, maze, visited, parent_r, parent_c, exit_r, exit_c)) {
                 return true;
             }
@@ -174,26 +164,18 @@ bool dfs(int r, int c,
 }
 
 // ----------------------------------------------------------
-// MAIN PROGRAM
+// MAIN PROGRAM (students add DFS calls and logic)
 // ----------------------------------------------------------
 int main() {
     int N, M;
 
     cout << "Enter maze dimensions N M: ";
-
-    if (!(cin >> N >> M)) {
-        cout << "\nInvalid input.\n";
-        return 0;
-    }
-
-    if (N <= 0 || M <= 0) {
-        cout << "\nMaze dimensions must be positive.\n";
-        return 0;
-    }
+    cin >> N >> M;
 
     vector<vector<int>> maze(N, vector<int>(M));
     generateMaze(maze, N, M);
 
+    // Pick entrance and exit
     pair<int,int> entrance = chooseBoundaryCell(maze);
     pair<int,int> exitcell = chooseBoundaryCell(maze);
 
@@ -206,8 +188,10 @@ int main() {
     int exit_r = exitcell.first;
     int exit_c = exitcell.second;
 
+    // Display the maze
     printMaze(maze, ent_r, ent_c, exit_r, exit_c);
 
+    // Students must use these
     vector<vector<bool>> visited(N, vector<bool>(M, false));
     vector<vector<int>> parent_r(N, vector<int>(M, -1));
     vector<vector<int>> parent_c(N, vector<int>(M, -1));
