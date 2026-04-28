@@ -113,6 +113,33 @@ void printPath(pair<int,int> exitcell,
     }
 }
 
+int countOpenBoundaryCells(const vector<vector<int>>& maze)
+{
+    int N = maze.size();
+    int M = maze[0].size();
+    int count = 0;
+
+    for (int c = 0; c < M; c++) {
+        if (maze[0][c] == 0) {
+            count++;
+        }
+        if (N > 1 && maze[N - 1][c] == 0) {
+            count++;
+        }
+    }
+
+    for (int r = 1; r < N - 1; r++) {
+        if (maze[r][0] == 0) {
+            count++;
+        }
+        if (M > 1 && maze[r][M - 1] == 0) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
 bool canVisit(int r, int c,
               const vector<vector<int>>& maze,
               const vector<vector<bool>>& visited)
@@ -173,7 +200,10 @@ int main() {
     cin >> N >> M;
 
     vector<vector<int>> maze(N, vector<int>(M));
-    generateMaze(maze, N, M);
+
+    do {
+        generateMaze(maze, N, M);
+    } while (countOpenBoundaryCells(maze) < 2);
 
     // Pick entrance and exit
     pair<int,int> entrance = chooseBoundaryCell(maze);

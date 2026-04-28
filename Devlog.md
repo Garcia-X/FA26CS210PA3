@@ -102,3 +102,20 @@
 - Kept the code ready for future final review before submission.
 
 **Commit:** (Day 6: review DFS implementation and clean up code)
+
+---
+
+## 2026-04-27
+**Work:** Boundary-cell validation for maze generation
+- Added a `countOpenBoundaryCells(...)` helper to count open cells on the maze boundary.
+- Updated `main()` to regenerate the maze until there are at least two open boundary cells available.
+- Kept the provided helper functions unchanged.
+- Kept the DFS logic, parent tracking, and output format the same.
+
+**Testing:**
+- Built the project successfully in CLion.
+- Ran the program with multiple maze sizes and confirmed that the maze still prints normally.
+- Confirmed that the program still prints the path when one exists and `No path exists.` otherwise.
+- Verified that the maze setup now avoids bad random cases where entrance and exit selection could get stuck.
+
+**Commit:** (Day 7: validate boundary cells before choosing entrance and exit)
