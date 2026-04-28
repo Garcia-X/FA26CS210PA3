@@ -113,26 +113,34 @@ void printPath(pair<int,int> exitcell,
     }
 }
 
-int countOpenBoundaryCells(const vector<vector<int>>& maze)
+int countDistinctOpenBoundaryCells(const vector<vector<int>>& maze)
 {
     int N = maze.size();
     int M = maze[0].size();
     int count = 0;
 
+    vector<vector<bool>> counted(N, vector<bool>(M, false));
+
     for (int c = 0; c < M; c++) {
-        if (maze[0][c] == 0) {
+        if (maze[0][c] == 0 && !counted[0][c]) {
+            counted[0][c] = true;
             count++;
         }
-        if (N > 1 && maze[N - 1][c] == 0) {
+
+        if (maze[N - 1][c] == 0 && !counted[N - 1][c]) {
+            counted[N - 1][c] = true;
             count++;
         }
     }
 
-    for (int r = 1; r < N - 1; r++) {
-        if (maze[r][0] == 0) {
+    for (int r = 0; r < N; r++) {
+        if (maze[r][0] == 0 && !counted[r][0]) {
+            counted[r][0] = true;
             count++;
         }
-        if (M > 1 && maze[r][M - 1] == 0) {
+
+        if (maze[r][M - 1] == 0 && !counted[r][M - 1]) {
+            counted[r][M - 1] = true;
             count++;
         }
     }
@@ -203,7 +211,7 @@ int main() {
 
     do {
         generateMaze(maze, N, M);
-    } while (countOpenBoundaryCells(maze) < 2);
+    } while (countDistinctOpenBoundaryCells(maze) < 2);
 
     // Pick entrance and exit
     pair<int,int> entrance = chooseBoundaryCell(maze);

@@ -119,3 +119,20 @@
 - Verified that the maze setup now avoids bad random cases where entrance and exit selection could get stuck.
 
 **Commit:** (Day 7: validate boundary cells before choosing entrance and exit)
+
+---
+
+## 2026-04-28
+**Work:** Distinct boundary-cell handling
+- Replaced the earlier boundary check with `countDistinctOpenBoundaryCells(...)` so boundary cells are counted by unique position.
+- Fixed the corner and single-row / single-column case where the same boundary cell could be counted more than once.
+- Kept the provided helper functions unchanged.
+- Kept the DFS logic, parent tracking, and output format the same.
+
+**Testing:**
+- Built the project successfully in CLion.
+- Ran the program with multiple maze sizes and confirmed that the maze still prints normally.
+- Confirmed that the program still prints the path when one exists and `No path exists.` otherwise.
+- Verified that the maze setup now checks for two distinct boundary positions before choosing entrance and exit.
+
+**Commit:** (Day 8: handle distinct boundary cells in maze setup)
