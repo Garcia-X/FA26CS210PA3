@@ -97,7 +97,6 @@ void printPath(pair<int,int> exitcell,
 
     vector<pair<int,int>> path;
 
-    // Walk backward from exit to entrance
     while (!(r == ent_r && c == ent_c)) {
         path.push_back({r, c});
         int pr = parent_r[r][c];
@@ -146,6 +145,11 @@ int countDistinctOpenBoundaryCells(const vector<vector<int>>& maze)
     }
 
     return count;
+}
+
+bool hasEnoughBoundaryCells(const vector<vector<int>>& maze)
+{
+    return countDistinctOpenBoundaryCells(maze) >= 2;
 }
 
 bool canVisit(int r, int c,
@@ -207,13 +211,17 @@ int main() {
     cout << "Enter maze dimensions N M: ";
     cin >> N >> M;
 
+    if (N == 1 && M == 1) {
+        cout << "\nNo path exists.\n";
+        return 0;
+    }
+
     vector<vector<int>> maze(N, vector<int>(M));
 
     do {
         generateMaze(maze, N, M);
-    } while (countDistinctOpenBoundaryCells(maze) < 2);
+    } while (!hasEnoughBoundaryCells(maze));
 
-    // Pick entrance and exit
     pair<int,int> entrance = chooseBoundaryCell(maze);
     pair<int,int> exitcell = chooseBoundaryCell(maze);
 
@@ -226,10 +234,8 @@ int main() {
     int exit_r = exitcell.first;
     int exit_c = exitcell.second;
 
-    // Display the maze
     printMaze(maze, ent_r, ent_c, exit_r, exit_c);
 
-    // Students must use these
     vector<vector<bool>> visited(N, vector<bool>(M, false));
     vector<vector<int>> parent_r(N, vector<int>(M, -1));
     vector<vector<int>> parent_c(N, vector<int>(M, -1));

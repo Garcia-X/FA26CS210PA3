@@ -136,3 +136,20 @@
 - Verified that the maze setup now checks for two distinct boundary positions before choosing entrance and exit.
 
 **Commit:** (Day 8: handle distinct boundary cells in maze setup)
+
+---
+
+## 2026-04-29
+**Work:** Small-maze edge case handling
+- Added a `hasEnoughBoundaryCells(...)` helper to make the maze setup check more readable.
+- Added a special-case check for `1 x 1` mazes, since two distinct boundary positions are impossible in that case.
+- Kept the provided helper functions unchanged.
+- Kept the DFS logic, parent tracking, and output format the same.
+
+**Testing:**
+- Built the project successfully in CLion.
+- Ran the program with `1 1`, `1 5`, `5 1`, and other small maze sizes.
+- Confirmed that normal mazes still print the path when one exists and `No path exists.` otherwise.
+- Verified that the `1 x 1` case exits cleanly instead of getting stuck in maze setup.
+
+**Commit:** (Day 9: handle small maze edge cases)
