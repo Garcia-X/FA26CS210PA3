@@ -6,6 +6,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <utility>
 
 using namespace std;
 
@@ -97,6 +98,7 @@ void printPath(pair<int,int> exitcell,
 
     vector<pair<int,int>> path;
 
+    // Walk backward from exit to entrance
     while (!(r == ent_r && c == ent_c)) {
         path.push_back({r, c});
         int pr = parent_r[r][c];
@@ -107,39 +109,50 @@ void printPath(pair<int,int> exitcell,
     path.push_back({ent_r, ent_c});
 
     cout << "\nPath from entrance to exit:\n";
-    for (int i = path.size() - 1; i >= 0; i--) {
+    for (int i = static_cast<int>(path.size()) - 1; i >= 0; i--) {
         cout << "(" << path[i].first << ", " << path[i].second << ")\n";
     }
+}
+
+vector<pair<int,int>> getBoundaryCells(int N, int M)
+{
+    vector<pair<int,int>> cells;
+    vector<vector<bool>> added(N, vector<bool>(M, false));
+
+    for (int c = 0; c < M; c++) {
+        if (!added[0][c]) {
+            cells.push_back({0, c});
+            added[0][c] = true;
+        }
+        if (!added[N - 1][c]) {
+            cells.push_back({N - 1, c});
+            added[N - 1][c] = true;
+        }
+    }
+
+    for (int r = 0; r < N; r++) {
+        if (!added[r][0]) {
+            cells.push_back({r, 0});
+            added[r][0] = true;
+        }
+        if (!added[r][M - 1]) {
+            cells.push_back({r, M - 1});
+            added[r][M - 1] = true;
+        }
+    }
+
+    return cells;
 }
 
 int countDistinctOpenBoundaryCells(const vector<vector<int>>& maze)
 {
     int N = maze.size();
     int M = maze[0].size();
+    vector<pair<int,int>> boundaryCells = getBoundaryCells(N, M);
     int count = 0;
 
-    vector<vector<bool>> counted(N, vector<bool>(M, false));
-
-    for (int c = 0; c < M; c++) {
-        if (maze[0][c] == 0 && !counted[0][c]) {
-            counted[0][c] = true;
-            count++;
-        }
-
-        if (maze[N - 1][c] == 0 && !counted[N - 1][c]) {
-            counted[N - 1][c] = true;
-            count++;
-        }
-    }
-
-    for (int r = 0; r < N; r++) {
-        if (maze[r][0] == 0 && !counted[r][0]) {
-            counted[r][0] = true;
-            count++;
-        }
-
-        if (maze[r][M - 1] == 0 && !counted[r][M - 1]) {
-            counted[r][M - 1] = true;
+    for (const auto& cell : boundaryCells) {
+        if (maze[cell.first][cell.second] == 0) {
             count++;
         }
     }
@@ -147,9 +160,32 @@ int countDistinctOpenBoundaryCells(const vector<vector<int>>& maze)
     return count;
 }
 
-bool hasEnoughBoundaryCells(const vector<vector<int>>& maze)
+void ensureTwoOpenBoundaryCells(vector<vector<int>>& maze)
 {
-    return countDistinctOpenBoundaryCells(maze) >= 2;
+    int N = maze.size();
+    int M = maze[0].size();
+
+    if (N == 1 && M == 1) {
+        maze[0][0] = 0;
+        return;
+    }
+
+    vector<pair<int,int>> boundaryCells = getBoundaryCells(N, M);
+    int openCount = countDistinctOpenBoundaryCells(maze);
+
+    for (const auto& cell : boundaryCells) {
+        if (openCount >= 2) {
+            break;
+        }
+
+        int r = cell.first;
+        int c = cell.second;
+
+        if (maze[r][c] == 1) {
+            maze[r][c] = 0;
+            openCount++;
+        }
+    }
 }
 
 bool canVisit(int r, int c,
@@ -211,17 +247,17 @@ int main() {
     cout << "Enter maze dimensions N M: ";
     cin >> N >> M;
 
+    vector<vector<int>> maze(N, vector<int>(M));
+    generateMaze(maze, N, M);
+    ensureTwoOpenBoundaryCells(maze);
+
     if (N == 1 && M == 1) {
+        printMaze(maze, 0, 0, 0, 0);
         cout << "\nNo path exists.\n";
         return 0;
     }
 
-    vector<vector<int>> maze(N, vector<int>(M));
-
-    do {
-        generateMaze(maze, N, M);
-    } while (!hasEnoughBoundaryCells(maze));
-
+    // Pick entrance and exit
     pair<int,int> entrance = chooseBoundaryCell(maze);
     pair<int,int> exitcell = chooseBoundaryCell(maze);
 
@@ -234,8 +270,10 @@ int main() {
     int exit_r = exitcell.first;
     int exit_c = exitcell.second;
 
+    // Display the maze
     printMaze(maze, ent_r, ent_c, exit_r, exit_c);
 
+    // Students must use these
     vector<vector<bool>> visited(N, vector<bool>(M, false));
     vector<vector<int>> parent_r(N, vector<int>(M, -1));
     vector<vector<int>> parent_c(N, vector<int>(M, -1));

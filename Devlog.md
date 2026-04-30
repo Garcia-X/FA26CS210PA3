@@ -152,4 +152,21 @@
 - Confirmed that normal mazes still print the path when one exists and `No path exists.` otherwise.
 - Verified that the `1 x 1` case exits cleanly instead of getting stuck in maze setup.
 
-**Commit:** (Day 9: handle small maze edge cases)
+**Commit:** (Day 9: handle small maze edge cases
+
+---
+
+## 2026-04-30
+**Work:** Final maze setup and edge-case cleanup
+- Reviewed the completed DFS implementation and kept the recursive search, visited tracking, parent tracking, and path reconstruction unchanged.
+- Added helpers to collect unique boundary cells and count distinct open boundary positions.
+- Added `ensureTwoOpenBoundaryCells(...)` so the maze always has enough valid boundary cells for different entrance and exit positions.
+- Added a `1 x 1` edge-case check so the program exits cleanly instead of getting stuck trying to choose two different boundary cells.
+
+**Testing:**
+- Built the project successfully in CLion.
+- Ran the program with normal maze sizes and confirmed that the maze, path output, and no-path output still work.
+- Tested small edge cases such as `1 1`, `1 5`, and `5 1`.
+- Confirmed that the maze setup no longer depends on repeated regeneration to find valid boundary cells.
+
+**Commit:** (Day 10: final cleanup + boundary setup + small-maze handling)
